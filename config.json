@@ -1,0 +1,7 @@
+{
+    "App_Base_Url": "http://localhost:4000",
+    "DB_NAME": "MERN-COURSE",
+    "Token_Expiration_Time_In_Seconds": 3600,
+	"Token_Secret_String": "wr3r23fwfwefwekwself.2456342.dawqdq"
+
+}
