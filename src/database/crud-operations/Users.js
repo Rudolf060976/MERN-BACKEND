@@ -53,7 +53,7 @@ const loginUser = async (email, password) => {
 
         if(!bcrypt.compareSync(password, user.password)) {
 
-            throw createError(401, 'Incorrect Password!');
+            throw createError(403, 'Incorrect Password!');
 
         }
 

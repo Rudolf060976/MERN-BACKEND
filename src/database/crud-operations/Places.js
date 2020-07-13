@@ -81,12 +81,30 @@ const getPlacesByUserId = async userId => {
 
 };
 
-const updatePlace = async (placeId, placeData) => {
+const updatePlace = async (placeId, authenticatedUserId, placeData) => {
 
   
     try {
         
-        const { title, description } = placeData;    
+        const { title, description } = placeData;  
+
+        if(!ObjectID.isValid(placeId)) {
+            throw createError('400', 'Invalid Place Id');
+        }
+        
+        const place = await Models.Place.findById(placeId);
+
+        if(!place) {
+            throw createError(404, 'Place Id Not Found');
+        }
+
+        // ANTES DE ACTUALIZAR EL PLACE, HAY QUE VERIFICAR SI EL USUARIO AUTENTICADO ES EL CREADOR DEL PLACE
+
+        if(place.creator.toString() !== authenticatedUserId.toString()) {
+
+            throw createError(401, 'Your are not allowed to edit this place' )
+
+        }
 
         const updatedPlace = await Models.Place.findByIdAndUpdate(placeId,{ title, description },{ new: true });
 
@@ -94,13 +112,13 @@ const updatePlace = async (placeId, placeData) => {
 
     } catch (error) {
         
-        throw createError(500, error.message);
+        throw createError(error.status || 500, error.message);
 
     }
 
 };
 
-const deletePlace = async (placeId, session) => {
+const deletePlace = async (placeId, authenticatedUserId, session) => {
 
     
     try {
@@ -116,6 +134,14 @@ const deletePlace = async (placeId, session) => {
         if(!existentPlace) {
 
             throw createError(404, 'Place Id Not Found');
+
+        }
+
+         // ANTES DE ACTUALIZAR EL PLACE, HAY QUE VERIFICAR SI EL USUARIO AUTENTICADO ES EL CREADOR DEL PLACE
+
+         if(existentPlace.creator.toString() !== authenticatedUserId.toString()) {
+
+            throw createError(401, 'Your are not allowed to delete this place' )
 
         }
 

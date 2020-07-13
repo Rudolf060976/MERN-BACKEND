@@ -7,6 +7,9 @@ const placesControllers = require('../controllers/places-controllers');
 
 const fileUpload = require('../middleware/file-upload');
 
+const auth = require('../middleware/auth');
+
+
 router.get('/:placeId', placesControllers.getPlaceById);
 
 
@@ -14,6 +17,7 @@ router.get('/user/:userId', placesControllers.getPlacesByUserId );
 
 
 router.post('/',
+auth.checkIsAuthenticated(),
 fileUpload.single('image'),
 [
     body('title').notEmpty().withMessage('must have a title'),
@@ -26,13 +30,14 @@ placesControllers.postCreatePlace);
 
 
 router.patch('/:placeId',
+auth.checkIsAuthenticated(),
 [
     body('title').notEmpty(),
     body('description').isLength({ min: 5 })
 ],
 placesControllers.patchUpdatePlace);
 
-router.delete('/:placeId', placesControllers.deleteDeletePlace);
+router.delete('/:placeId', auth.checkIsAuthenticated(), placesControllers.deleteDeletePlace);
 
 
 

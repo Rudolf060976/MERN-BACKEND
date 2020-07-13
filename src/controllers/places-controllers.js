@@ -72,17 +72,19 @@ const postCreatePlace = async (req, res, next) => {
 
     }
 
-    const { title, description, address, creator } = req.body;
+    const { title, description, address } = req.body;
 
     let session = null;
 
     try {
+
+        const creator = req.user.id; // EL id DEL USUARIO ES COLOCADO POR auth.checkIsAuthenticated Middleware
         
         placeData = {
             title,
             description,
             address,
-            creator,
+            creator, 
             image: req.file.path
         };        
 
@@ -151,8 +153,10 @@ const patchUpdatePlace = async (req, res, next) => {
 
    
     try {
+
+        const authenticatedUserId = req.user.id;
         
-        const updatedPlace = await  crudOperations.Places.updatePlace(placeId, { title, description });
+        const updatedPlace = await  crudOperations.Places.updatePlace(placeId, authenticatedUserId, { title, description });
 
         res.status(200).json({
             error: null,
@@ -185,10 +189,12 @@ const deleteDeletePlace = async (req, res, next) => {
 
         session.startTransaction();
 
+        const authenticatedUserId = req.user.id;
+        
 
         await crudOperations.Users.deletePlaceFromUser(placeId, session);
                
-        const deletedPlace = await crudOperations.Places.deletePlace(placeId, session);
+        const deletedPlace = await crudOperations.Places.deletePlace(placeId, authenticatedUserId, session);
 
         await session.commitTransaction();
 

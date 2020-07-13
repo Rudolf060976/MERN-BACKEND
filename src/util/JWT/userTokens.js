@@ -17,10 +17,11 @@ const generateUserToken = async user => {
 
 	try {
 
-		const { _id } = user;
+		const { _id, email } = user;
 
 		const payload = {
-			userId: _id
+			userId: _id,
+			email 
 		};	
 
 		const token = await jwt.sign(payload, secretOrKey, Options);
@@ -41,10 +42,11 @@ const verifyUserToken = token => {
 
 		if(payload) {
 			
-			const { userId } = payload;
+			const { userId, email } = payload;
 
 			return {
-                userId
+				userId,
+				email
             };
 		}
 
