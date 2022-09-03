@@ -7,7 +7,6 @@ const jwt = require('../util/JWT/userTokens');
 
 const getUsers = async (req, res, next) => {
 
-
     try {
         
         const users = await crudOperations.Users.getAllUsers();

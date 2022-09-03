@@ -2,7 +2,7 @@ const createError = require('http-errors');
 const Models = require('../models');
 const { ObjectID } = require('mongodb');
 const bcrypt  = require('bcryptjs');
-const { ObjectId } = require('mongodb');
+
 
 
 const addNewUser = async (userData) => {

@@ -10,6 +10,7 @@ const fileUpload = require('../middleware/file-upload');
 
 router.get('/', usersControllers.getUsers);
 
+
 router.post('/signup',
 fileUpload.single('image'),
 [
@@ -18,6 +19,8 @@ fileUpload.single('image'),
     body('password').trim().isLength({ min: 6 })
 ],
 usersControllers.signup);
+
+
 
 router.post('/login',
 [
